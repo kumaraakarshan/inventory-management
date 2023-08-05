@@ -1,5 +1,5 @@
 
-function displayAppointmentData(data) {
+async function displayAppointmentData(data) {
     const itemList = document.getElementById('items');
     itemList.innerHTML = ''; // Clear the existing list items
     itemList.addEventListener('click', handleItemClick);
@@ -31,64 +31,50 @@ function displayAppointmentData(data) {
     });
 }
 
-function handleItemClick(e) {
+async function handleItemClick(e) {
     if (e.target.classList.contains('buy1')) {
         if (confirm('Are you sure you want to purchase 1 item?')) {
 
             const key = e.target.dataset.key;
+            try{
+            const response=await axios.get(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`)
             
-            axios.get(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`)
-            .then((response)=>{
                 console.log(response);
                 const data =response.data;
                 data.quantity =data.quantity-1;
 
-                axios.put(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`, {
+                await axios.put(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`, {
                      quantity: data.quantity,
                      name:data.name,
                      price:data.price,
                      Description:data.Description
-                    })
-                    .then((response) => {
-                        console.log(response);
+                    });
                         fetchDataAndDisplay();
-                    })
-                    .catch((err) => console.log(err));
-
-                
-
-                fetchDataAndDisplay();
-            })
-            .catch((err)=>console.log(err));
+                    }
+                    catch(err){ console.log(err);
+                    }    
         }
     } else if (e.target.classList.contains('buy2')) {
         if (confirm('Are you sure you want to purchase 2 item?')) {
 
             const key = e.target.dataset.key;
+            try{
+            const response=await axios.get(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`)
             
-            axios.get(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`)
-            .then((response)=>{
                 console.log(response);
                 const data =response.data;
                 data.quantity =data.quantity-2;
 
-                axios.put(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`, {
+                await axios.put(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`, {
                      quantity: data.quantity,
                      name:data.name,
                      price:data.price,
                      Description:data.Description
-                    })
-                    .then((response) => {
-                        console.log(response);
+                    });
                         fetchDataAndDisplay();
-                    })
-                    .catch((err) => console.log(err));
-
-                
-
-                fetchDataAndDisplay();
-            })
-            .catch((err)=>console.log(err));
+                    }
+                    catch(err){ console.log(err);
+                    }    
         }
 
 
@@ -96,44 +82,40 @@ function handleItemClick(e) {
         if (confirm('Are you sure you want to purchase 3 item?')) {
 
             const key = e.target.dataset.key;
+            try{
+            const response=await axios.get(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`)
             
-            axios.get(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`)
-            .then((response)=>{
                 console.log(response);
                 const data =response.data;
                 data.quantity =data.quantity-3;
 
-                axios.put(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`, {
+                await axios.put(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`, {
                      quantity: data.quantity,
                      name:data.name,
                      price:data.price,
                      Description:data.Description
-                    })
-                    .then((response) => {
-                        console.log(response);
+                    });
                         fetchDataAndDisplay();
-                    })
-                    .catch((err) => console.log(err));
-
-                
-
-                fetchDataAndDisplay();
-            })
-            .catch((err)=>console.log(err));
+                    }
+                    catch(err){ console.log(err);
+                    }    
         }
 
 
     }
 }
-function fetchDataAndDisplay() {
-    axios.get(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData`)
-        .then((response) => {
-            const data = response.data;
-            displayAppointmentData(data);
-        })
-        .catch((err) => console.log(err));
+async function fetchDataAndDisplay() {
+    try {
+        const response = await axios.get(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData`);
+        const data = response.data;
+        displayAppointmentData(data);
+    } catch (err) {
+        console.log(err);
+    }
 }
-document.getElementById("submitBtn").addEventListener("click", function() {
+
+
+document.getElementById("submitBtn").addEventListener("click", async function() {
     const name = document.getElementById("name").value;
     const Description = document.getElementById("Description").value;
     const quantity = document.getElementById("quantity").value;
@@ -151,17 +133,19 @@ document.getElementById("submitBtn").addEventListener("click", function() {
             
         };
         let myObj_serialized = JSON.stringify(myObj);
-        axios.put(`https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData/${key}`, myObj_serialized, {
+        try{
+        const response=await axios.put(`https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData/${key}`, myObj_serialized, {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
-        .then((response) => {
+        });
+        
             console.log(response);
             // Refresh the data after successful upprice
             fetchDataAndDisplay();
-        })
-        .catch((err) => console.log(err));
+        }
+        catch(err) {console.log(err);
+        }
        
         document.getElementById("submitBtn").textContent = "Add Data";
        // document.getElementById("submitBtn").removeAttribute("data-key");
@@ -175,16 +159,18 @@ document.getElementById("submitBtn").addEventListener("click", function() {
             price: price
         };
         let myObj_serialized = JSON.stringify(myObj);
-        axios.post("https://crudcrud.com/api/59836e6cf4604463b20a8f6d0319d029/itemData", myObj_serialized,{
+        try{
+        const response=await axios.post("https://crudcrud.com/api/cd67f6f701e24856a7e17337e2315e5a/itemData", myObj_serialized,{
             headers: {
                 'Content-Type': 'application/json'
               }
-        })
-        .then((response) => {
+        });
+        
             fetchDataAndDisplay(); 
           console.log(response);
-        })
-        .catch((err) => console.log(err));
+        }
+        catch(err) {console.log(err);
+        }
         
     }
 
